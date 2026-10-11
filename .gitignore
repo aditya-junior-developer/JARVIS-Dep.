@@ -1,0 +1,9 @@
+# Never commit credentials or local dependencies
+.env
+.env.*
+!.env.example
+node_modules/
+.DS_Store
+*.pem
+*service-account*.json
+*serviceAccount*.json
