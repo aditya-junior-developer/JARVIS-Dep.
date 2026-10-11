@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#050b17">
+  <title>JARVIS · Device Calling</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main class="layout">
+    <header>
+      <div class="eyebrow">JARVIS V6 · CALLING</div>
+      <h1>Call your devices</h1>
+      <p>Connect your laptop and phone using your Google account, then make real-time two-way voice calls.</p>
+      <span class="note">Internet required · Foreground browser calling · No Bluetooth range limit</span>
+    </header>
+    <section class="panel" aria-labelledby="authTitle">
+      <div class="row"><h2 id="authTitle">1 · Sign in</h2><span class="tag" id="authState">Not signed in</span></div>
+      <div class="actions"><button id="login" type="button">Continue with Google</button><button id="logout" class="secondary" type="button" hidden>Sign out</button></div>
+      <p class="hint">Use the SAME Google account on both devices. Allow the sign-in popup.</p>
+    </section>
+    <section class="panel" aria-labelledby="pairTitle">
+      <h2 id="pairTitle">2 · Pair this device</h2>
+      <div class="actions pair"><label for="devName">Device name<input id="devName" placeholder="e.g. My Phone" autocomplete="off" maxlength="48"></label><button id="register" type="button" disabled>Register device</button></div>
+      <p id="myDevice" class="hint" aria-live="polite">Sign in to register this browser.</p>
+    </section>
+    <section class="panel" aria-labelledby="devicesTitle">
+      <div class="row"><h2 id="devicesTitle">3 · My devices</h2><span class="tag">Same account</span></div>
+      <div id="devices" class="devices" aria-live="polite">Sign in to see connected devices.</div>
+    </section>
+    <section class="panel" aria-labelledby="callTitle">
+      <h2 id="callTitle">4 · Voice call</h2>
+      <div id="callStatus" class="call-status" role="status" aria-live="polite">Idle</div>
+      <div class="actions"><button id="answer" type="button" disabled>Answer call</button><button class="danger" id="hang" type="button" disabled>Decline / Hang up</button></div>
+      <audio id="remoteAudio" autoplay controls playsinline></audio>
+      <p class="hint">Keep both pages open and grant microphone access. Some networks require a TURN server.</p>
+    </section>
+    <p id="message" class="message" role="alert" hidden></p>
+    <footer>Standalone browser calling only; this does not run the desktop assistant or receive calls when Android closes the browser.</footer>
+  </main>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
