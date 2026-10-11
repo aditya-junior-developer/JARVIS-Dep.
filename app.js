@@ -34,9 +34,12 @@ function stopCallListeners() {
 }
 function resetCall() {
   stopCallListeners();
-  pc?.close(); pc = null;
+  if (pc) { pc.ontrack = null; pc.onicecandidate = null; pc.onconnectionstatechange = null; pc.close(); pc = null; }
   mic?.getTracks().forEach(track => track.stop()); mic = null;
-  el('remoteAudio').srcObject = null;
+  const audio = el('remoteAudio');
+  audio.pause();
+  audio.srcObject = null;
+  audio.load();
   activeCall = null;
   incoming = null;
   pendingIce = [];
@@ -66,7 +69,7 @@ async function establishPeer() {
     throw new Error('Microphone unavailable. Open the page on HTTPS and allow microphone access.');
   }
   mic = await navigator.mediaDevices.getUserMedia({
-    audio: { echoCancellation: true, noiseSuppression: true }, video: false
+    audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true, channelCount: 1 }, video: false
   });
   // STUN-only proof of concept. Reliable cross-network calling also needs a TURN relay.
   pc = new RTCPeerConnection({ iceServers: [
@@ -74,8 +77,12 @@ async function establishPeer() {
   ] });
   mic.getTracks().forEach(track => pc.addTrack(track, mic));
   pc.ontrack = event => {
-    el('remoteAudio').srcObject = event.streams[0];
-    el('remoteAudio').play().catch(() => status('Connected — tap Play to hear the call.'));
+    if (event.track.kind !== 'audio') return;
+    const audio = el('remoteAudio');
+    const stream = event.streams[0] || new MediaStream([event.track]);
+    // Avoid resetting the audio element for repeated track events.
+    if (audio.srcObject !== stream) audio.srcObject = stream;
+    audio.play().catch(() => status('Connected — tap Play to hear the call.'));
   };
   pc.onconnectionstatechange = () => {
     if (!pc) return;
