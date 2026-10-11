@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "rewrites": [{"source": "/", "destination": "/calls.html"}],
+  "headers": [
+    {"source": "/(.*)", "headers": [
+      {"key": "X-Content-Type-Options", "value": "nosniff"},
+      {"key": "Referrer-Policy", "value": "strict-origin-when-cross-origin"}
+    ]}
+  ]
+}
